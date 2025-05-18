@@ -67,4 +67,4 @@ if st.button("Predecir aforo"):
     X_meta = np.column_stack((pred_xgb, pred_svr, pred_lgbm))
     y_pred = modelos["meta_model"].predict(X_meta)
 
-    st.success(f"Predicción de aforo: {int(y_pred[0], 2)} personas")
+    st.success(f"Predicción de aforo: {int(y_pred[0])} personas")
