@@ -10,7 +10,8 @@ except ImportError:
     import joblib
 
 
-modelos = joblib.load("./App/stacking_manual_aforo_2.pkl")
+modelos = joblib.load("stacking_manual_aforo_2.pkl")
+
 
 # Función para preparar el dataframe de entrada igual que antes (misma que definimos)
 def preparar_input(fecha, clima_str, temp_min, temp_max, vuelos, cruceros, festivos_sel):
