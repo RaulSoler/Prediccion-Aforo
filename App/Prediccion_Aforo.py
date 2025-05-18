@@ -45,11 +45,11 @@ def preparar_input(fecha, clima_str, temp_min, temp_max, vuelos, cruceros, festi
         'dia_semana': [dia_semana],
         'mes': [mes],
         'semana': [semana],
-        'festivo_madrid': [festivo_madrid],
-        'festivo_cataluna': [festivo_cataluna],
-        'festivo_andalucia': [festivo_andalucia],
         'festivo_valencia': [festivo_valencia],
-        'festivo_nacional': [festivo_nacional]
+        'festivo_nacional': [festivo_nacional],
+        'festivo_andalucia': [festivo_andalucia],
+        'festivo_madrid': [festivo_madrid],
+        'festivo_cataluna': [festivo_cataluna]
     })
 
     # Convertimos las columnas categóricas a tipo 'category' 
