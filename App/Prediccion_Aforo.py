@@ -3,6 +3,13 @@ import pandas as pd
 import numpy as np
 import joblib
 from datetime import date
+try:
+    import joblib
+except ImportError:
+    import os
+    os.system("pip install joblib")
+    import joblib
+
 
 modelos = joblib.load("stacking_manual_aforo.pkl")
 
