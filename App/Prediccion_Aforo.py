@@ -4,7 +4,8 @@ import numpy as np
 from datetime import date
 import joblib
 
-modelos = joblib.load("stacking_manual_aforo.pkl")
+modelos = joblib.load("App/stacking_manual_aforo.pkl")
+
 
 # Función para preparar el dataframe de entrada igual que antes (misma que definimos)
 def preparar_input(fecha, clima_str, temp_min, temp_max, vuelos, cruceros, festivos_sel):
