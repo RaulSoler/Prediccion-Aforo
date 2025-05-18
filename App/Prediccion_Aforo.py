@@ -10,7 +10,7 @@ except ImportError:
     import joblib
 
 
-modelos = joblib.load("./App/stacking_manual_aforo_2.pkl")
+modelos = joblib.load("./App/stacking_manual_aforo.pkl")
 
 
 
