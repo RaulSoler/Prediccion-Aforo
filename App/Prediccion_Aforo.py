@@ -2,10 +2,15 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from datetime import date
-import joblib
+try:
+    import joblib
+except ImportError:
+    import os
+    os.system("pip install joblib")
+    import joblib
 
-modelos = joblib.load("App/stacking_manual_aforo.pkl")
 
+modelos = joblib.load("stacking_manual_aforo_2.pkl")
 
 # Función para preparar el dataframe de entrada igual que antes (misma que definimos)
 def preparar_input(fecha, clima_str, temp_min, temp_max, vuelos, cruceros, festivos_sel):
@@ -16,10 +21,18 @@ def preparar_input(fecha, clima_str, temp_min, temp_max, vuelos, cruceros, festi
     semana = fecha.isocalendar()[1]
 
     festivo_nacional = 1 if 'Nacional' in festivos_sel else 0
-    festivo_valencia = 1 if 'Valencia' in festivos_sel else 0
-    festivo_madrid = 1 if 'Madrid' in festivos_sel else 0
-    festivo_andalucia = 1 if 'Andalucia' in festivos_sel else 0
-    festivo_cataluna = 1 if 'Cataluña' in festivos_sel else 0
+
+# Si es festivo nacional, el resto también lo son
+    if festivo_nacional:
+        festivo_valencia = 1
+        festivo_madrid = 1
+        festivo_andalucia = 1
+        festivo_cataluna = 1
+    else:
+        festivo_valencia = 1 if 'Valencia' in festivos_sel else 0
+        festivo_madrid = 1 if 'Madrid' in festivos_sel else 0
+        festivo_andalucia = 1 if 'Andalucia' in festivos_sel else 0
+        festivo_cataluna = 1 if 'Cataluña' in festivos_sel else 0
 
     X_pred = pd.DataFrame({
         'temp_max': [temp_max],
@@ -30,11 +43,11 @@ def preparar_input(fecha, clima_str, temp_min, temp_max, vuelos, cruceros, festi
         'dia_semana': [dia_semana],
         'mes': [mes],
         'semana': [semana],
-        'festivo_valencia': [festivo_valencia],
-        'festivo_nacional': [festivo_nacional],
-        'festivo_andalucia': [festivo_andalucia],
         'festivo_madrid': [festivo_madrid],
-        'festivo_cataluna': [festivo_cataluna]
+        'festivo_cataluna': [festivo_cataluna],
+        'festivo_andalucia': [festivo_andalucia],
+        'festivo_valencia': [festivo_valencia],
+        'festivo_nacional': [festivo_nacional]
     })
 
     # Convertimos las columnas categóricas a tipo 'category' 
@@ -62,9 +75,11 @@ if st.button("Predecir aforo"):
     pred_xgb = modelos["modelo_xgb"].predict(X_nuevo)
     pred_svr = modelos["modelo_svr"].predict(X_nuevo)
     pred_lgbm = modelos["modelo_lgbm"].predict(X_nuevo)
+    pred_cat = modelos["modelo_catboos"].predict(X_nuevo)
+
 
     # Meta-predicción
-    X_meta = np.column_stack((pred_xgb, pred_svr, pred_lgbm))
+    X_meta = np.column_stack((pred_xgb, pred_svr, pred_lgbm,pred_cat))
     y_pred = modelos["meta_model"].predict(X_meta)
 
     st.success(f"Predicción de aforo: {int(y_pred[0])} personas")
